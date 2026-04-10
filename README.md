@@ -232,5 +232,10 @@ ai-research-env/
 
 ---
 
+## Author
+**Atharva** ([@atharva-dev1](https://github.com/atharva-dev1))
+
+---
+
 ## License
 MIT
