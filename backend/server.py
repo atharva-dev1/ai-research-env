@@ -51,7 +51,9 @@ def health():
     return {"status": "ok", "env": "AI-Research-Env", "tasks": list(TASKS.keys()), "actions": VALID_ACTIONS}
 
 @app.post("/reset", response_model=ResetResponse)
-def reset(req: ResetRequest):
+def reset(req: Optional[ResetRequest] = None):
+    if req is None:
+        req = ResetRequest()
     if req.task_name not in TASKS:
         raise HTTPException(400, f"task_name must be one of {list(TASKS.keys())}")
     sid = req.session_id or str(uuid.uuid4())
