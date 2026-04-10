@@ -13,9 +13,12 @@ import os, sys, textwrap
 from typing import List, Optional
 from openai import OpenAI
 
-API_KEY      = os.getenv("HF_TOKEN") or os.getenv("API_KEY", "")
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
-MODEL_NAME   = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
+MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+# Optional - if you use from_docker_image():
+LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 BENCHMARK    = "ai-research-env"
 MAX_STEPS    = 10
 TEMPERATURE  = 0.4
@@ -43,9 +46,9 @@ ACTION_PROMPTS = {
 def log_start(task, env, model): print(f"[START] task={task} env={env} model={model}", flush=True)
 def log_step(step, action, reward, done, error):
     err = error if error else "null"
-    print(f"[STEP] step={step} action={action!r:.80} reward={reward:.2f} done={str(done).lower()} error={err}", flush=True)
+    print(f"[STEP]  step={step} action={action} reward={reward:.2f} done={str(done).lower()} error={err}", flush=True)
 def log_end(success, steps, score, rewards):
-    print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={','.join(f'{r:.2f}' for r in rewards)}", flush=True)
+    print(f"[END]   success={str(success).lower()} steps={steps} score={score:.3f} rewards={','.join(f'{r:.2f}' for r in rewards)}", flush=True)
 
 PHASE_SEQUENCE = ["read_paper","propose_hypothesis","design_experiment","run_experiment","analyze_results","refine_hypothesis","final_answer"]
 
@@ -53,7 +56,7 @@ def run_task(task_name: str) -> dict:
     sys.path.insert(0, os.path.dirname(__file__))
     from backend.env.research_env import Action, ResearchEnv
 
-    client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+    client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
     env = ResearchEnv(task_name=task_name)
     obs = env.reset()
     rewards: List[float] = []
