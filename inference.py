@@ -51,7 +51,7 @@ PHASE_SEQUENCE = ["read_paper","propose_hypothesis","design_experiment","run_exp
 
 def run_task(task_name: str) -> dict:
     sys.path.insert(0, os.path.dirname(__file__))
-    from env.research_env import Action, ResearchEnv
+    from backend.env.research_env import Action, ResearchEnv
 
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
     env = ResearchEnv(task_name=task_name)

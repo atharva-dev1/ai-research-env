@@ -1,10 +1,10 @@
 # ── Stage 1: Build React frontend ──────────────────────────────────────────
 FROM node:20-slim AS frontend-builder
-WORKDIR /app/frontend
+WORKDIR /build/frontend
 COPY frontend/package*.json ./
 RUN npm ci --silent
 COPY frontend/ ./
-# Build → outputs to /app/backend/static
+# Build outputs to /build/backend/static (per vite.config.js outDir: '../backend/static')
 RUN npm run build
 
 # ── Stage 2: Python backend ────────────────────────────────────────────────
@@ -15,8 +15,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ ./backend/
 COPY inference.py openenv.yaml ./
-# Copy built frontend static files
-COPY --from=frontend-builder /app/backend/static ./backend/static
+# Copy built frontend static files from Stage 1
+COPY --from=frontend-builder /build/backend/static ./backend/static
 EXPOSE 7860
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD curl -f http://localhost:7860/health || exit 1

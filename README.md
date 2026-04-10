@@ -69,12 +69,12 @@ Each task provides:
 
 ```bash
 # Start episode
-curl -X POST https://YOUR_HF_USERNAME-ai-research-env.hf.space/reset \
+curl -X POST https://atharvsha01-ai-research-env.hf.space/reset \
   -H "Content-Type: application/json" \
   -d '{"task_name": "cv-classification"}'
 
 # Submit action
-curl -X POST https://YOUR_HF_USERNAME-ai-research-env.hf.space/step \
+curl -X POST https://atharvsha01-ai-research-env.hf.space/step \
   -H "Content-Type: application/json" \
   -d '{
     "session_id": "<from reset>",
@@ -101,7 +101,7 @@ curl -X POST https://YOUR_HF_USERNAME-ai-research-env.hf.space/step \
   "last_feedback": "Good coverage of batch norm! Add specifics on LR scheduling.",
   "step_number": 2,
   "max_steps": 8,
-  "progress": {"read_paper": true, "propose_hypothesis": false, ...},
+  "progress": {"read_paper": true, "propose_hypothesis": false},
   "hints": ["Consider why the model overfits after epoch 20..."]
 }
 ```
@@ -127,8 +127,8 @@ curl -X POST https://YOUR_HF_USERNAME-ai-research-env.hf.space/step \
 ### Run locally (Docker)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ai-research-env
-cd ai-research-env
+git clone https://huggingface.co/spaces/atharvsha01/ai_research_env
+cd ai_research_env
 
 docker build -t ai-research-env .
 docker run -p 7860:7860 \
