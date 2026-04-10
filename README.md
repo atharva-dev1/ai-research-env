@@ -16,6 +16,10 @@ pinned: false
 
 # 🔬 AI-Research-Env
 
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-3110/)
+[![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-yellow)](https://huggingface.co/spaces/atharvsha01/ai_research_env)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 **An OpenEnv-compatible simulation platform for end-to-end scientific discovery using AI agents.**
 
 Instead of treating LLMs as simple prompt-response systems, this environment trains agents to operate inside a **structured research workflow** — reading papers, forming hypotheses, designing experiments, running them, analysing results, and producing final conclusions. This mirrors real ML research, making agents trained here directly useful in practice.
