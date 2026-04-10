@@ -131,8 +131,8 @@ curl -X POST https://atharvsha01-ai-research-env.hf.space/step \
 ### Run locally (Docker)
 
 ```bash
-git clone https://huggingface.co/spaces/atharvsha01/ai_research_env
-cd ai_research_env
+git clone https://huggingface.co/spaces/username/ai-research-env
+cd ai-research-env
 
 docker build -t ai-research-env .
 docker run -p 7860:7860 \
@@ -233,7 +233,7 @@ ai-research-env/
 ---
 
 ## Author
-**Atharva** ([@atharva-dev1](https://github.com/atharva-dev1))
+Developed by **Atharva** ([@atharva-dev1](https://github.com/atharva-dev1))
 
 ---
 
