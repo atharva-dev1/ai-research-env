@@ -9,49 +9,91 @@ description: >
 tags: [openenv, ai-research, scientific-discovery, rl-environment]
 
 tasks:
-  - id: cv-classification
+  - name: cv-classification
     difficulty: easy
     max_steps: 8
     description: "Image classification under distribution shift (CIFAR-10 + noise)"
-  - id: nlp-sentiment
+  - name: nlp-sentiment
     difficulty: medium
     max_steps: 10
     description: "Sentiment analysis with 20% noisy labels + cross-domain shift"
-  - id: healthcare-tabular
+  - name: healthcare-tabular
     difficulty: hard
     max_steps: 12
     description: "ICU mortality prediction with missing data, leakage, and fairness constraints"
 
-actions: [read_paper, propose_hypothesis, design_experiment, run_experiment, analyze_results, refine_hypothesis, final_answer]
+action_space:
+  type: object
+  description: >
+    Research action with type, content, and optional parameters.
+  fields:
+    - name: action_type
+      type: string
+      description: "One of: read_paper, propose_hypothesis, design_experiment, run_experiment, analyze_results, refine_hypothesis, final_answer"
+    - name: content
+      type: string
+      description: "Agent's free-text input for this action"
+    - name: parameters
+      type: object
+      description: "Optional structured parameters"
 
 observation_space:
+  type: object
   fields:
-    task_id: string
-    task_name: string
-    difficulty: string
-    research_context: string
-    current_phase: string
-    allowed_actions: array
-    last_feedback: string
-    step_number: integer
-    max_steps: integer
-    progress: object
-    hints: array
+    - name: task_id
+      type: string
+    - name: task_name
+      type: string
+    - name: difficulty
+      type: string
+    - name: research_context
+      type: string
+      description: "Background papers, dataset description, problem statement"
+    - name: current_phase
+      type: string
+    - name: allowed_actions
+      type: "list[string]"
+    - name: last_feedback
+      type: string
+    - name: step_number
+      type: integer
+    - name: max_steps
+      type: integer
+    - name: progress
+      type: object
+    - name: hints
+      type: "list[string]"
 
-action_space:
-  fields:
-    action_type: {type: string, enum: [read_paper, propose_hypothesis, design_experiment, run_experiment, analyze_results, refine_hypothesis, final_answer]}
-    content: {type: string}
-    parameters: {type: object, optional: true}
-
-reward: {type: float, range: [0.0, 1.0]}
+env_vars:
+  - name: API_BASE_URL
+    description: "OpenAI-compatible API endpoint for LLM inference"
+    required: true
+    default: "https://router.huggingface.co/v1"
+  - name: MODEL_NAME
+    description: "Model identifier to use for inference"
+    required: true
+    default: "Qwen/Qwen2.5-72B-Instruct"
+  - name: API_KEY
+    description: "LiteLLM proxy API key — injected by the hackathon validator; must be used for all LLM calls"
+    required: true
+    default: ""
+  - name: HF_TOKEN
+    description: "Hugging Face API key — used as the OpenAI client api_key"
+    required: false
+    default: ""
+  - name: OPENAI_API_KEY
+    description: "API key for OpenAI-compatible endpoint — accepted in place of HF_TOKEN"
+    required: false
+    default: ""
 
 endpoints:
   reset:  POST /reset
   step:   POST /step
-  state:  GET  /state/{session_id}
+  state:  GET  /state?session_id=...
   health: GET  /health
   tasks:  GET  /tasks
 
+reward: {type: float, range: [0.0, 1.0]}
+
 docker: {port: 7860, build: "docker build -t ai-research-env .", run: "docker run -p 7860:7860 ai-research-env"}
-huggingface: {space_sdk: docker, tags: [openenv]}
+huggingface: {space_sdk: docker, app_port: 7860, tags: [openenv, ai-research, scientific-discovery]}
